@@ -1,0 +1,1 @@
+var covidApp= angular.module('covidApp',[]);

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Covid Data</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/customCss.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.js"></script>
+	<script type="text/javascript" src="/js/covidApp.js"></script>
+	<script type="text/javascript" src="/js/services/covidDetailsService.js"></script>
+	<script type="text/javascript" src="/js/controller/covidController.js"></script>
+</head>
+<body>
+	<div class="fluid-container" ng-app="covidApp" ng-controller="covidController" ng-init="getTotal()">
+
+		<div id="header">
+			<div class="jumbotron text-center row well-sm">
+				<h3>Country Wise Covid Details</h3>
+			</div>
+		</div>
+		<div id="links">
+			<nav class="navbar navbar-defaults">
+				<div class="container-fluid">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<button class="btn btn-link" ng-click="enableHome()">Home</button>
+						</li>
+						<li><button class="btn btn-link" ng-click="enableCountriesHome()">Countries</button></li>
+						<li><button class="btn btn-link" ng-click="enableNamePage()">Covid Details By Country Name</button></li>
+						<li><button class="btn btn-link" ng-click="enableCodePage()">Covid Details By Country Code</button></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div class="row pd-50" ng-if="loader">
+			<div class="loader12"></div>
+		</div>
+		<div id="content" ng-if="!loader">
+			<div class="row table pd" ng-if="home">
+				<div class="col-md-12 table">
+					<div class="row ">
+						<div class="col-md-2 table-bordered text-center bd ">Confirmed</div>
+						<div class="col-md-2 table-bordered text-center bd">Critical</div>
+						<div class="col-md-2 table-bordered text-center bd ">Deaths</div>
+						<div class="col-md-2 table-bordered text-center bd">Recovered</div>
+					</div>
+					<div class="row" ng-repeat="covid in covidData track by $index">
+						<div class="col-md-2 table-bordered text-center">{{
+							covid.confirmed }}</div>
+						<div class="col-md-2 table-bordered  text-center">{{
+							covid.critical }}</div>
+						<div class="col-md-2 table-bordered text-center">{{
+							covid.deaths }}</div>
+						<div class="col-md-2 table-bordered text-center">{{
+							covid.recovered }}</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row pd " ng-if="country">
+				<div class="col-md-12" style="padding-bottom: 4%">
+					<div class="row">
+						<div class="col-md-7"></div>
+						<div class="col-md-4" style="padding-right: 8%">
+							<input type="text" class="form-control col-md-4"
+								ng-model="searchByName" placeholder="Search By Name">
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="col-md-12">
+					<!--  Add back button here -->
+					<div class="row">
+						<div class="col-md-2 table-bordered text-center ">
+							<h5 class="bd">Name</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Country Code</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Latitude</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Longitude</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Favorite</h5>
+						</div>
+
+					</div>
+					<div ng-if="countries.length==0 || !countries[0]" class="row">
+						<div class="col-md-12 mgNoData alert alert-info text-center "> No Data Exists</div>
+					</div>
+					<div class="row " ng-if="countries.length!=0 && countries[0]" ng-repeat="country in countries | filter:searchByName">
+						<div class="col-md-2 table-bordered text-center">
+							<button class="btn btn-link wrapText"
+								ng-click="loadCountryDetailsByName(country.name)">{{country.name}}</button>
+						</div>
+
+						<div class="col-md-2 table-bordered text-center ">
+							<button class="btn btn-link wrapText"
+								ng-click="loadCountryDetailsByCode(country.alpha2code)">
+								{{country.alpha2code}}</button>
+						</div>
+
+
+						<div
+							class="col-md-2 table-bordered text-center wrapText maxHeight">
+							{{country.latitude}}</div>
+
+						<div
+							class="col-md-2 table-bordered text-center wrapText maxHeight">
+							{{country.longitude}}</div>
+
+						<div
+							class="col-md-2 table-bordered text-center wrapText  maxHeight">
+							<button class="btn btn-default btn-lg btn-link" ng-click="setFavourite(country)">
+								<span class="glyphicon glyphicon-star" ng-if="country.favourite"></span>
+								<span class="glyphicon glyphicon-star-empty" ng-if="!country.favourite"></span>
+							</button>
+
+						</div>
+
+					</div>
+
+					<div class="row" style="padding-top: 4%; padding-left: 7%">
+
+						<div class="col-md-9"></div>
+						<div class="col-md-3">
+							<button class="btn btn-primary" ng-click="enableHome()">Back</button>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div ng-if="countryType && !loader" class=" row ">
+				<div class="col-md-4 text-right  ">
+					<h5>{{ text}}:</h5>
+				</div>
+				<div class="col-md-4">
+					<select ng-model="selectedValue" class="form-control">
+						<option ng-repeat="y in data">{{y}}</option>
+					</select>
+				</div>
+				<div class="col-md-4"></div>
+				<br /> <br />
+				<div class="col-md-4"></div>
+				<div class="col-md-3"></div>
+				<div class="col-md-4 ">
+					<br /> <br />
+					<button class=" btn btn-primary"
+						ng-click="loadCovidDetailsByInput(selectedValue)">Submit</button>
+				</div>
+			</div>
+
+			<div ng-if="byName  && !loader">
+
+				<!--  Add back button here -->
+				<div class="col-md-12 table pdname">
+					<div class="row ">
+
+						<div class="col-md-2 table-bordered text-center bd ">
+							<h5 class="bd">Country</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd ">
+							<h5 class="bd">Confirmed</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Critical</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd ">
+							<h5 class="bd">Deaths</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Recovered</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Comments</h5>
+						</div>
+					</div>
+					<div class="row" ng-if="countryByName.length==0 || !countryByName[0]">
+						<div class=" col-md-12 text-center alert alert-info">No Data Exists In DB</div>
+					</div>
+
+					<div class="row" ng-repeat="covid in countryByName track by $index">
+
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.country }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.confirmed }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.critical }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.deaths }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.recovered }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">
+							<button class="btn btn-link" ng-click="viewCommentPage()">View</button>
+							|
+							<button class="btn btn-link" ng-click="openCommentPage()">Add</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div ng-if="byCode  && !loader">
+				<div class="col-md-12 table pdname">
+					<!--  Add back button here -->
+					<div class="row ">
+
+						<div class="col-md-2 table-bordered text-center bd ">
+							<h5 class="bd">Code</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd ">
+							<h5 class="bd">Confirmed</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Critical</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd ">
+							<h5 class="bd">Deaths</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Recovered</h5>
+						</div>
+						<div class="col-md-2 table-bordered text-center bd">
+							<h5 class="bd">Comments</h5>
+						</div>
+					</div>
+					<div class="row" ng-if="countryByCode.length==0 || !countryByCode[0]">
+						<div class=" col-md-12 text-center alert alert-info">No Data Exists In DB</div>
+					</div>
+					<div class="row" ng-if="countryByCode.length!=0  && countryByCode[0] "
+						ng-repeat="covid in countryByCode track by $index">
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.code }}</div>
+
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.confirmed }}</div>
+						<div
+							class="col-md-2 table-bordered  text-right  wrapText maxHeight">{{
+							covid.critical }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.deaths }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+							covid.recovered }}</div>
+						<div
+							class="col-md-2 table-bordered text-right  wrapText maxHeight">
+							<button class="btn btn-link" ng-click="viewCommentPage()">View</button>
+							|
+							<button class="btn btn-link" ng-click="openCommentPage()">Add</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div ng-if="commentSection && showAddComment ">
+				<div class="row">
+					<div class="col-md-12 pdname">
+						<div class="col-md-2 text-right">
+							<h4 class="bd">Add Commment:</h4>
+						</div>
+						<div class="col-md-6">
+							<input type="text" name="input" ng-model="addCovidComments.comments" ng-pattern="addCovidComments.word"
+								   ng-trim="true" class="form-control col-md-6 commentCss">
+						</div>
+						<button class="btn btn-primary" ng-click="addComments()">Add</button>
+					</div>
+				</div>
+			</div>
+
+			<div ng-if='commentSection && viewComment'>
+				<div class="row">
+					<div class="col-md-12 pdname">
+						<div class="row table">
+							<div class="col-md-12 ">
+								<h4 class="bd">Comments</h4>
+							</div>
+						</div>
+						<div class="row table " ng-repeat="comm in myComment">{{comm}}</div>
+
+
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="footer"></div>
+	</div>
+</body>
+</html>
