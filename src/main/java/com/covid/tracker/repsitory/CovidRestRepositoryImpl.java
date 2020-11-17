@@ -96,6 +96,7 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 					new ParameterizedTypeReference<List<CovidTotal>>() {
 					});
 		} catch (Exception e) {
+			LOGGER.error("error: ", e);
 			throw new CovidRapidAPIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(),
 					"Exception Occurred While Getting Data from Service");
 
