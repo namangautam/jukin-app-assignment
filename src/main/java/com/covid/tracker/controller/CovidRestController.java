@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.covid.tracker.model.Country;
 import com.covid.tracker.model.exception.CovidRapidAPIException;
-import com.covid.tracker.service.CovidDetailsService;
 
 @RestController
 public class CovidRestController {
@@ -26,29 +25,12 @@ public class CovidRestController {
 
 	@GetMapping(value = { "/countries" })
 	public Object getAllCountries() {
-		try {
-			return covidDetailsService.getCountries(false);
-		} catch (CovidRapidAPIException e) {
-			Object responseMap = new HashMap<>();
-			Object country = covidDetailsService.getCountries(true);
-			((HashMap<Object, Object>) responseMap).put("error", "Data is fetched from Database");
-			((HashMap) responseMap).put("response", country);
-			return responseMap;
-		}
+		return covidDetailsService.getCountries();
 	}
 
 	@GetMapping(value = { "/covidDetails" })
 	public Object getCovidDetails() {
-		try {
-			return covidDetailsService.getTotal(false);
-		} catch (CovidRapidAPIException e) {
-			Object responseMap = new HashMap<>();
-			Object covidTotal = covidDetailsService.getTotal(true);
-			((HashMap) responseMap).put("error", "Data is fetched from Database");
-			((HashMap) responseMap).put("response", covidTotal);
-			return responseMap;
-		}
-
+		return covidDetailsService.getTotal();
 	}
 
 	@GetMapping(value = { "/covidDetailsByName/{name}" })

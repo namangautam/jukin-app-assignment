@@ -1,8 +1,6 @@
 package com.covid.tracker.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -55,101 +52,25 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 	private ApiHistoryRepository apiHistoryRepository;
 
 	@Override
-	@Transactional
-	public List<Country> getCountries(boolean fetchDb) {
-		// add logic update it after 7 days
-		boolean isOutdated = checkOutDated("countries");
-		List<Country> countries = new ArrayList<>();
-		List<Country> countriesInDB = new ArrayList<>();
+	public List<Country> getCountries() {
+		List<Country> countriesInDB;
 		try {
-			if(fetchDb) {
-				return countryRepository.findAll();
-			}
-			if (isOutdated) {
-				countries = covidRestRepository.getListOfCountries();
-				countriesInDB = countryRepository.findAll();
-				List<String> countriesName = countriesInDB.stream().map(Country::getName).collect(Collectors.toList());
-
-				countriesInDB.addAll(countries.stream().filter(o -> !countriesName.contains(o.getName()))
-						.collect(Collectors.toList()));
-				updateHistory("countries");
-				countryRepository.saveAll(countriesInDB);
-				isOutdated = false;
-
-			} else {
-				countriesInDB = countryRepository.findAll();
-			}
-
-		} catch (CovidRapidAPIException e) {
-			throw new CovidRapidAPIException(HttpStatus.INTERNAL_SERVER_ERROR, "Excpetion occurred while getting data from Rapid API", e.getDetailedMessage());
+			countriesInDB = countryRepository.findAll(Sort.by(Sort.Direction.DESC, "favourite"));
 		} catch (Exception e) {
 			throw new CovidException(String.format("Excpetion occurred while updating get countries"), e);
 		}
-
 		return countriesInDB;
 	}
 
 	@Override
-	@Transactional
-	public List<CovidTotal> getTotal(boolean fetchDb) {
-		// add logic update it after 7 days
-		boolean isOutdated = checkOutDated("total");
-		List<CovidTotal> covidDetails = new ArrayList<>();
-		List<CovidTotal> covidDetailsInDB = new ArrayList<>();
-
+	public List<CovidTotal> getTotal() {
+		List<CovidTotal> covidDetailsInDB;
 		try {
-			if(fetchDb) {
-				return totalRepository.findAll();
-			}
-			if (isOutdated) {
-				covidDetails = covidRestRepository.getTotal();
-				final CovidTotal totals = covidDetails.get(0);
-				covidDetailsInDB = totalRepository.findAll();
-				// There will always be one record
-				if(CollectionUtils.isEmpty(covidDetailsInDB)) {
-					covidDetailsInDB.addAll(covidDetails);
-				}else {
-				covidDetailsInDB.forEach(y -> {
-					y.setConfirmed(totals.getConfirmed());
-					y.setCritical(totals.getCritical());
-					y.setDeaths(totals.getDeaths());
-					y.setRecovered(totals.getRecovered());
-					y.setLastChange(totals.getLastChange());
-					y.setLastUpdate(totals.getLastUpdate());
-
-				});
-				}
-				updateHistory("total");
-				totalRepository.saveAll(covidDetailsInDB);
-				isOutdated = false;
-
-			} else {
-				covidDetailsInDB = totalRepository.findAll();
-			}
-		} catch (CovidRapidAPIException e) {
-			throw new CovidRapidAPIException(HttpStatus.INTERNAL_SERVER_ERROR, "Excpetion occurred while getting data from Rapid API", e.getDetailedMessage());
+			covidDetailsInDB = totalRepository.findAll();
 		} catch (Exception e) {
 			throw new CovidException(String.format("Excpetion occurred while updating total covid data"), e);
 		}
-
 		return covidDetailsInDB;
-	}
-
-	private void updateHistory(String apiName) {
-		try {
-			List<ApiHistory> history = apiHistoryRepository.findAllByApiName(apiName, Sort.Direction.DESC);
-			if (CollectionUtils.isEmpty(history)) {
-				apiHistoryRepository.save(new ApiHistory(new ObjectId(), apiName, new Date(), null));
-			} else {
-				ApiHistory hist = history.get(0);
-				hist.setDate(new Date());
-				apiHistoryRepository.save(hist);
-			}
-		} catch (Exception e) {
-			throw new CovidException(
-					String.format("Excpetion occurred while updating history with apiName {}", apiName), e);
-		}
-
 	}
 
 	private void updateHistory(String apiName, String type) {
@@ -181,7 +102,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 			}
 			if (isOutdated) {
 				covidDataInDB = covidDataRepository.findByCountry(name);
-				covidData = covidRestRepository.getCovidDataByName(name);
+				covidData = covidRestRepository.getCovidDataByCountryNameFromAPI(name);
 				if (!CollectionUtils.isEmpty(covidData)) {
 					covidDataInDB = CovidData.copy(covidData.get(0), covidDataInDB);
 
@@ -214,7 +135,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 			}
 			if (isOutdated) {
 				covidDataInDB = covidDataRepository.findByCode(code);
-				List<CovidData> covidDataFromService = covidRestRepository.getCovidDataByCode(code);
+				List<CovidData> covidDataFromService = covidRestRepository.getCovidDataByCountryCodeFromAPI(code);
 				// covidDataInDB = CovidData.copy(covidData, covidDataInDB);
 				if (CollectionUtils.isEmpty(covidDataFromService)) {
 					// throw exception from here or message
@@ -275,16 +196,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 	@Override
 	public Map<String, Set<String>> getCountriesCodeMap() {
 		try {
-			List<Country> countries = countryRepository.findAll();
-			if (CollectionUtils.isEmpty(countries)) {
-				// call countries services
-				countries = getCountries(false);
-				if (CollectionUtils.isEmpty(countries)) {
-					return Collections.emptyMap();
-				}
-				countryRepository.saveAll(countries);
-			}
-
+			List<Country> countries = countryRepository.findAll(Sort.by(Sort.Direction.DESC, "favourite"));
 			Map<String, Set<String>> countriesCodeMap = new HashMap<>();
 			for (Country country : countries) {
 				updateMapIfKeyPresent("countries", countriesCodeMap, country.getName());

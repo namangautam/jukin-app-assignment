@@ -1,0 +1,21 @@
+<div class="row table pd" ng-if="home">
+    <div class="col-md-12 table">
+        <div class="row ">
+            <div class="col-md-2 table-bordered text-center bd ">Confirmed</div>
+            <div class="col-md-2 table-bordered text-center bd">Critical</div>
+            <div class="col-md-2 table-bordered text-center bd ">Deaths</div>
+            <div class="col-md-2 table-bordered text-center bd">Recovered</div>
+        </div>
+        <div class="row" ng-repeat="covid in covidData track by $index">
+            <div class="col-md-2 table-bordered text-center">{{
+                covid.confirmed }}</div>
+            <div class="col-md-2 table-bordered  text-center">{{
+                covid.critical }}</div>
+            <div class="col-md-2 table-bordered text-center">{{
+                covid.deaths }}</div>
+            <div class="col-md-2 table-bordered text-center">{{
+                covid.recovered }}</div>
+        </div>
+    </div>
+
+</div>

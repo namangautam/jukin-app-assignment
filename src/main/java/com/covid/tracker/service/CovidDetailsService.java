@@ -14,9 +14,9 @@ import com.covid.tracker.model.CovidTotal;
 @Service
 public interface CovidDetailsService {
 
-	List<Country> getCountries(boolean fetchDb);
+	List<Country> getCountries();
 
-	default List<CovidTotal> getTotal(boolean fetchDb) {
+	default List<CovidTotal> getTotal() {
 		return Collections.emptyList();
 	}
 
