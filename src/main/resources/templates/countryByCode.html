@@ -1,0 +1,53 @@
+<div ng-if="byCode  && !loader">
+    <div class="row ">
+
+        <div class="col-md-2 table-bordered text-center bd ">
+            <h5 class="bd">Code</h5>
+        </div>
+        <div class="col-md-2 table-bordered text-center bd ">
+            <h5 class="bd">Confirmed</h5>
+        </div>
+        <div class="col-md-2 table-bordered text-center bd">
+            <h5 class="bd">Critical</h5>
+        </div>
+        <div class="col-md-2 table-bordered text-center bd ">
+            <h5 class="bd">Deaths</h5>
+        </div>
+        <div class="col-md-2 table-bordered text-center bd">
+            <h5 class="bd">Recovered</h5>
+        </div>
+        <div class="col-md-2 table-bordered text-center bd">
+            <h5 class="bd">Comments</h5>
+        </div>
+    </div>
+    <div class="row" ng-if="countryByCode.length==0 || !countryByCode[0]">
+        <div class=" col-md-12 text-center alert alert-info">No Data Exists In DB</div>
+    </div>
+    <div class="row" ng-if="countryByCode.length!=0  && countryByCode[0] "
+         ng-repeat="covid in countryByCode track by $index">
+        <div
+                class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+            covid.code }}</div>
+
+        <div
+                class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+            covid.confirmed }}</div>
+        <div
+                class="col-md-2 table-bordered  text-right  wrapText maxHeight">{{
+            covid.critical }}</div>
+        <div
+                class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+            covid.deaths }}</div>
+        <div
+                class="col-md-2 table-bordered text-right  wrapText maxHeight">{{
+            covid.recovered }}</div>
+        <div
+                class="col-md-2 table-bordered text-right  wrapText maxHeight">
+            <button class="btn btn-link" ng-click="viewCommentPage()">View</button>
+            |
+            <button class="btn btn-link" ng-click="openCommentPage()">Add</button>
+        </div>
+
+    </div>
+</div>
+</div>
