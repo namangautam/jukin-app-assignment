@@ -41,10 +41,7 @@ public class CovidScheduler {
     @Autowired
     private TotalRepository totalRepository;
 
-    @Scheduled(cron = "${update.cron}")
-    @Transactional
-    @PostConstruct
-    public void updateOutdatedCountries() {
+    private void updateOutdatedCountries() {
         try {
             LOGGER.info("updateOutdatedCountries: Starting scheduler to update ");
             List<Country> countries = covidRestRepository.getListOfCountriesFromAPI();
@@ -61,10 +58,7 @@ public class CovidScheduler {
         }
     }
 
-    @Scheduled(cron = "${update.cron}")
-    @Transactional
-    @PostConstruct
-    public void updateOutdatedCovidDetails() {
+    private void updateOutdatedCovidDetails() {
         try {
             LOGGER.info("updateOutdatedCovidDetails: Starting scheduler to update ");
             List<CovidTotal> covidDetails = covidRestRepository.getCovidTotalForAllCountriesFromAPI();
@@ -90,6 +84,19 @@ public class CovidScheduler {
         } catch (Exception e) {
             LOGGER.error("updateOutdatedCovidDetails: Error - ", e);
         }
+    }
+
+    @Scheduled(cron = "${update.cron}")
+    @Transactional
+    @PostConstruct
+    public void runAtStart() {
+        updateOutdatedCountries();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            LOGGER.error("exception in thread sleep", e);
+        }
+        updateOutdatedCovidDetails();
     }
 
     private void updateHistory(String apiName) {

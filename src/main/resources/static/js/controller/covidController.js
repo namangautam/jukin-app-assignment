@@ -37,6 +37,9 @@ covidApp.controller('covidController',
 							$scope.countryData=data;
 						}
 						$scope.enableLoader=false;
+						if($.isEmptyObject(data) || data['code'] == null || data['countries'] == null) {
+							$("#errorMessageModal").modal("show");
+						}
 					},function(error){
 						// alert("Error Occurred");
 						console.log("fetchCountryCodeMap: Error in connectivity", error);
