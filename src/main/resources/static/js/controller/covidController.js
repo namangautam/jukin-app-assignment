@@ -104,6 +104,7 @@ covidApp.controller('covidController',
 						}else{
 							$scope.countryByName=data;
 							console.log("country By Name data=", $scope.countryByName);
+							$scope.viewCommentPage();
 						}
 						$scope.enableLoader=false;
 
@@ -132,6 +133,7 @@ covidApp.controller('covidController',
 						$scope.countryByCode=data['response'];
 					}else{
 						$scope.countryByCode=data;
+						$scope.viewCommentPage();
 					}
 					$scope.enableLoader=false;
 					}, function(err){
@@ -175,10 +177,12 @@ covidApp.controller('covidController',
 				$scope.loadCovidDetailsByInput =  function(selectedValue){
 					if($scope.method === 'code'){
 						$scope.enableCodeHome(selectedValue);
+						$scope.viewCommentPage();
 					}
 
 					if($scope.method === 'name'){
 						$scope.enableNameHome(selectedValue);
+						$scope.viewCommentPage();
 					}
 				}
 
@@ -340,8 +344,14 @@ covidApp.controller('covidController',
 
 							$scope.myComment=data['response'];
 					}else{
-							$scope.myComment=data;
+							if(data.length > 0) {
+								$scope.myComment=data;
+							} else {
+								$scope.viewComment = false;
+								$scope.commentSection = false;
 							}
+						}
+
 							$scope.enableLoader=false;
 						},function(data){
 							console.log("retrieveCommentByCode: Error in connectivity");
@@ -357,7 +367,12 @@ covidApp.controller('covidController',
 							// alert(data['error']);
 						$scope.myComment=data['response'];
 					}else{
-						$scope.myComment=data;
+							if(data.length > 0) {
+								$scope.myComment=data;
+							} else {
+								$scope.viewComment = false;
+								$scope.commentSection = false;
+							}
 						}
 						$scope.enableLoader=false;
 						},function(data){

@@ -47,16 +47,6 @@
 			<div ng-include="'country'"></div>
 
 			<div ng-if="countryType && !loader" class=" row ">
-				<div class="col-md-12">
-					<div class="row" style="padding-top: 4%; padding-left: 7%">
-
-						<div class="col-md-9"></div>
-						<div class="col-md-3">
-							<button class="btn btn-primary" ng-click="enableHome()">Back</button>
-						</div>
-
-					</div>
-				</div>
 				<div class="col-md-4 text-right  ">
 					<h5>{{ text}}:</h5>
 				</div>
@@ -67,7 +57,7 @@
 				</div>
 				<div class="col-md-4 ">
 					<button class=" btn btn-primary"
-						ng-click="loadCovidDetailsByInput(selectedValue)">Submit</button>
+						ng-click="loadCovidDetailsByInput(selectedValue);">Submit</button>
 				</div>
 			</div>
 
