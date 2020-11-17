@@ -75,8 +75,7 @@
 				</div>
 				<br />
 				<div class="col-md-12">
-					<div class="row" style="padding-top: 4%; padding-left: 7%">
-
+					<div class="row" style="padding-bottom: 1%">
 						<div class="col-md-9"></div>
 						<div class="col-md-3">
 							<button class="btn btn-primary" ng-click="enableHome()">Back</button>
@@ -158,20 +157,13 @@
 						<option ng-repeat="y in data">{{y}}</option>
 					</select>
 				</div>
-				<div class="col-md-4"></div>
-				<br /> <br />
-				<div class="col-md-4"></div>
-				<div class="col-md-3"></div>
 				<div class="col-md-4 ">
-					<br /> <br />
 					<button class=" btn btn-primary"
 						ng-click="loadCovidDetailsByInput(selectedValue)">Submit</button>
 				</div>
 			</div>
 
 			<div ng-if="byName  && !loader">
-
-				<!--  Add back button here -->
 				<div class="col-md-12 table pdname">
 					<div class="row ">
 
@@ -226,18 +218,6 @@
 			</div>
 
 			<div ng-if="byCode  && !loader">
-				<div class="col-md-12">
-					<div class="row" style="padding-top: 4%; padding-left: 7%">
-
-						<div class="col-md-9"></div>
-						<div class="col-md-3">
-							<button class="btn btn-primary" ng-click="enableHome()">Back</button>
-						</div>
-
-					</div>
-				</div>
-				<div class="col-md-12 table pdname">
-					<!--  Add back button here -->
 					<div class="row ">
 
 						<div class="col-md-2 table-bordered text-center bd ">
