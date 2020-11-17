@@ -16,7 +16,7 @@ covidApp.controller('covidController',
 				$scope.viewComment=false;
 				$scope.addCovidComments = {
 					 comments: " ",
-					word: /^\s*\w*\s*$/
+					word: /^.+$/
 				}
 				$scope.selectedValue='';
 				$scope.method='';
