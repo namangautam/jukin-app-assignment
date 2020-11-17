@@ -62,12 +62,13 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 		List<Country> countries = new ArrayList<>();
 		List<Country> countriesInDB = new ArrayList<>();
 		try {
+			Sort sortParams = Sort.by(Sort.Direction.DESC, "favourite");
 			if(fetchDb) {
-				return countryRepository.findAll();
+				return countryRepository.findAll(sortParams);
 			}
 			if (isOutdated) {
 				countries = covidRestRepository.getListOfCountries();
-				countriesInDB = countryRepository.findAll();
+				countriesInDB = countryRepository.findAll(sortParams);
 				List<String> countriesName = countriesInDB.stream().map(Country::getName).collect(Collectors.toList());
 
 				countriesInDB.addAll(countries.stream().filter(o -> !countriesName.contains(o.getName()))
@@ -77,7 +78,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 				isOutdated = false;
 
 			} else {
-				countriesInDB = countryRepository.findAll();
+				countriesInDB = countryRepository.findAll(sortParams);
 			}
 
 		} catch (CovidRapidAPIException e) {
