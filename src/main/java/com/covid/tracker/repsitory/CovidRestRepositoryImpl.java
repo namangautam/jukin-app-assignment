@@ -52,7 +52,7 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 	private String apiKey;
 
 	@Override
-	public List<Country> getListOfCountries() {
+	public List<Country> getListOfCountriesFromAPI() {
 		LOGGER.info("Start of getListOfCountries method ==> ");
 		HttpHeaders headers = buildRequest();
 		HttpEntity<String> request = new HttpEntity<>(headers);
@@ -84,7 +84,7 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 	}
 
 	@Override
-	public List<CovidTotal> getCovidTotalForAllCountries() {
+	public List<CovidTotal> getCovidTotalForAllCountriesFromAPI() {
 		LOGGER.info("Start of fetchCovidDetailsForAllCountries method ==> ");
 		HttpHeaders headers = buildRequest();
 		HttpEntity<String> request = new HttpEntity<>(headers);
@@ -112,7 +112,7 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 	}
 
 	@Override
-	public List<CovidData> getCovidDataByCountryName(String name) {
+	public List<CovidData> getCovidDataByCountryNameFromAPI(String name) {
 		LOGGER.info("Start of getCovidDataByName method ==> ");
 		HttpHeaders headers = buildRequest();
 		Map<String, String> queryMap = new HashMap<String, String>();
@@ -139,7 +139,7 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 	}
 
 	@Override
-	public List<CovidData> getCovidDataByCountryCode(String code) {
+	public List<CovidData> getCovidDataByCountryCodeFromAPI(String code) {
 		LOGGER.info("Start of getCovidDataByCode method ==> ");
 		HttpHeaders headers = buildRequest();
 		HttpEntity<String> request = new HttpEntity<>(headers);

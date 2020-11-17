@@ -67,7 +67,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 				return countryRepository.findAll(sortParams);
 			}
 			if (isOutdated) {
-				countries = covidRestRepository.getListOfCountries();
+				countries = covidRestRepository.getListOfCountriesFromAPI();
 				countriesInDB = countryRepository.findAll(sortParams);
 				List<String> countriesName = countriesInDB.stream().map(Country::getName).collect(Collectors.toList());
 
@@ -103,7 +103,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 				return totalRepository.findAll();
 			}
 			if (isOutdated) {
-				covidDetails = covidRestRepository.getCovidTotalForAllCountries();
+				covidDetails = covidRestRepository.getCovidTotalForAllCountriesFromAPI();
 				final CovidTotal totals = covidDetails.get(0);
 				covidDetailsInDB = totalRepository.findAll();
 				// There will always be one record
@@ -182,7 +182,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 			}
 			if (isOutdated) {
 				covidDataInDB = covidDataRepository.findByCountry(name);
-				covidData = covidRestRepository.getCovidDataByCountryName(name);
+				covidData = covidRestRepository.getCovidDataByCountryNameFromAPI(name);
 				if (!CollectionUtils.isEmpty(covidData)) {
 					covidDataInDB = CovidData.copy(covidData.get(0), covidDataInDB);
 
@@ -215,7 +215,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 			}
 			if (isOutdated) {
 				covidDataInDB = covidDataRepository.findByCode(code);
-				List<CovidData> covidDataFromService = covidRestRepository.getCovidDataByCountryCode(code);
+				List<CovidData> covidDataFromService = covidRestRepository.getCovidDataByCountryCodeFromAPI(code);
 				// covidDataInDB = CovidData.copy(covidData, covidDataInDB);
 				if (CollectionUtils.isEmpty(covidDataFromService)) {
 					// throw exception from here or message
@@ -276,7 +276,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 	@Override
 	public Map<String, Set<String>> getCountriesCodeMap() {
 		try {
-			List<Country> countries = countryRepository.findAll();
+			List<Country> countries = countryRepository.findAll(Sort.by(Sort.Direction.DESC, "favourite"));
 			if (CollectionUtils.isEmpty(countries)) {
 				// call countries services
 				countries = getCountries(false);
