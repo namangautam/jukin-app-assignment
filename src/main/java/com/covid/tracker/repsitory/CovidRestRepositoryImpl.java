@@ -84,8 +84,8 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 	}
 
 	@Override
-	public List<CovidTotal> getTotal() {
-		LOGGER.info("Start of getTotal method ==> ");
+	public List<CovidTotal> getCovidTotalForAllCountries() {
+		LOGGER.info("Start of fetchCovidDetailsForAllCountries method ==> ");
 		HttpHeaders headers = buildRequest();
 		HttpEntity<String> request = new HttpEntity<>(headers);
 
@@ -107,12 +107,12 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 		}
 		LOGGER.info("End of Rest Template Exhange and response received {}  with size ==> ", resp, resp.size());
 
-		LOGGER.info("End of getListOfCountries method ==> ");
+		LOGGER.info("End of fetchCovidDetailsForAllCountries method ==> ");
 		return resp;
 	}
 
 	@Override
-	public List<CovidData> getCovidDataByName(String name) {
+	public List<CovidData> getCovidDataByCountryName(String name) {
 		LOGGER.info("Start of getCovidDataByName method ==> ");
 		HttpHeaders headers = buildRequest();
 		Map<String, String> queryMap = new HashMap<String, String>();
@@ -139,7 +139,7 @@ public class CovidRestRepositoryImpl implements CovidRestRepository {
 	}
 
 	@Override
-	public List<CovidData> getCovidDataByCode(String code) {
+	public List<CovidData> getCovidDataByCountryCode(String code) {
 		LOGGER.info("Start of getCovidDataByCode method ==> ");
 		HttpHeaders headers = buildRequest();
 		HttpEntity<String> request = new HttpEntity<>(headers);

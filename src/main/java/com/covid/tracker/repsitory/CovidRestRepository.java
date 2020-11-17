@@ -13,9 +13,9 @@ public interface CovidRestRepository {
 
 	List<Country> getListOfCountries();
 
-	List<CovidTotal> getTotal();
+	List<CovidTotal> getCovidTotalForAllCountries();
 
-	List<CovidData> getCovidDataByCode(String code);
-	List<CovidData> getCovidDataByName(String name);
+	List<CovidData> getCovidDataByCountryCode(String code);
+	List<CovidData> getCovidDataByCountryName(String name);
 
 }

@@ -103,7 +103,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 				return totalRepository.findAll();
 			}
 			if (isOutdated) {
-				covidDetails = covidRestRepository.getTotal();
+				covidDetails = covidRestRepository.getCovidTotalForAllCountries();
 				final CovidTotal totals = covidDetails.get(0);
 				covidDetailsInDB = totalRepository.findAll();
 				// There will always be one record
@@ -182,7 +182,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 			}
 			if (isOutdated) {
 				covidDataInDB = covidDataRepository.findByCountry(name);
-				covidData = covidRestRepository.getCovidDataByName(name);
+				covidData = covidRestRepository.getCovidDataByCountryName(name);
 				if (!CollectionUtils.isEmpty(covidData)) {
 					covidDataInDB = CovidData.copy(covidData.get(0), covidDataInDB);
 
@@ -215,7 +215,7 @@ public class CovidDetailsServiceImpl implements CovidDetailsService {
 			}
 			if (isOutdated) {
 				covidDataInDB = covidDataRepository.findByCode(code);
-				List<CovidData> covidDataFromService = covidRestRepository.getCovidDataByCode(code);
+				List<CovidData> covidDataFromService = covidRestRepository.getCovidDataByCountryCode(code);
 				// covidDataInDB = CovidData.copy(covidData, covidDataInDB);
 				if (CollectionUtils.isEmpty(covidDataFromService)) {
 					// throw exception from here or message
