@@ -57,12 +57,12 @@ covidApp.service('covidDetailsService',function($http){
 		}
 
 		function success(data,error){
-			console.log("data"+data);
+			console.log("data",data);
 			return data.data;
 		}
 		
 		function error(err){
-			console.log("error"+err);
+			console.log("error",err);
 			return err.data;
 		}
 })
