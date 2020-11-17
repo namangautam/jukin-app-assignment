@@ -39,7 +39,7 @@ covidApp.controller('covidController',
 						$scope.enableLoader=false;
 					},function(error){
 						// alert("Error Occurred");
-						console.log("fetchCountryCodeMap: Error in connectivity");
+						console.log("fetchCountryCodeMap: Error in connectivity", error);
 					});
 				}
 
@@ -58,7 +58,7 @@ covidApp.controller('covidController',
 						$scope.enableLoader=false;
 					},function(error){
 							// alert("Error Occurred");
-						console.log("fetchCountries: Error in connectivity");
+						console.log("fetchCountries: Error in connectivity", error);
 					});
 				}
 
@@ -80,7 +80,7 @@ covidApp.controller('covidController',
 						$scope.enableLoader=false;
 					},function(error){
 						// alert("Error Occurred");
-						console.log("getTotal: Error in connectivity");
+						console.log("getTotal: Error in connectivity", error);
 
 					});
 
@@ -110,7 +110,7 @@ covidApp.controller('covidController',
 
 					}, function(err){
 						// alert("Error Occurred");
-						console.log("loadCountryDataByName: Error in connectivity");
+						console.log("loadCountryDataByName: Error in connectivity", err);
 
 					});
 
@@ -138,7 +138,7 @@ covidApp.controller('covidController',
 					$scope.enableLoader=false;
 					}, function(err){
 						// alert("Error Occurred");
-						console.log("loadCountryDataByCode: Error in connectivity");
+						console.log("loadCountryDataByCode: Error in connectivity", err);
 
 					});
 
@@ -217,7 +217,7 @@ covidApp.controller('covidController',
 
 					}, function(err){
 						// alert("Error Occurred");
-						console.log("addCommentByCode: Error in connectivity");
+						console.log("addCommentByCode: Error in connectivity", err);
 
 					});
 				}
@@ -238,7 +238,7 @@ covidApp.controller('covidController',
 						$scope.addCovidComments.comments='';
 					}, function(err){
 						// alert("Error Occurred");
-						console.log("addCommentByName: Error in connectivity");
+						console.log("addCommentByName: Error in connectivity", err);
 
 					});
 				}
@@ -319,7 +319,7 @@ covidApp.controller('covidController',
 					},
 					function(error){
 						// alert("Error Occurred");
-						console.log("updateCountry: Error in connectivity");
+						console.log("updateCountry: Error in connectivity", error);
 
 					});
 
@@ -375,8 +375,8 @@ covidApp.controller('covidController',
 							}
 						}
 						$scope.enableLoader=false;
-						},function(data){
-							console.log("retrieveCommentByName: Error in connectivity");
+						},function(error){
+							console.log("retrieveCommentByName: Error in connectivity", error);
 
 						});
 
