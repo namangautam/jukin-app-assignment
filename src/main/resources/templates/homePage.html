@@ -75,7 +75,14 @@
 				</div>
 				<br />
 				<div class="col-md-12">
-					<!--  Add back button here -->
+					<div class="row" style="padding-top: 4%; padding-left: 7%">
+
+						<div class="col-md-9"></div>
+						<div class="col-md-3">
+							<button class="btn btn-primary" ng-click="enableHome()">Back</button>
+						</div>
+
+					</div>
 					<div class="row">
 						<div class="col-md-2 table-bordered text-center ">
 							<h5 class="bd">Name</h5>
@@ -129,6 +136,11 @@
 
 					</div>
 
+				</div>
+			</div>
+
+			<div ng-if="countryType && !loader" class=" row ">
+				<div class="col-md-12">
 					<div class="row" style="padding-top: 4%; padding-left: 7%">
 
 						<div class="col-md-9"></div>
@@ -137,11 +149,7 @@
 						</div>
 
 					</div>
-
 				</div>
-			</div>
-
-			<div ng-if="countryType && !loader" class=" row ">
 				<div class="col-md-4 text-right  ">
 					<h5>{{ text}}:</h5>
 				</div>
@@ -218,6 +226,16 @@
 			</div>
 
 			<div ng-if="byCode  && !loader">
+				<div class="col-md-12">
+					<div class="row" style="padding-top: 4%; padding-left: 7%">
+
+						<div class="col-md-9"></div>
+						<div class="col-md-3">
+							<button class="btn btn-primary" ng-click="enableHome()">Back</button>
+						</div>
+
+					</div>
+				</div>
 				<div class="col-md-12 table pdname">
 					<!--  Add back button here -->
 					<div class="row ">
