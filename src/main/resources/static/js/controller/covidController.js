@@ -146,7 +146,7 @@ covidApp.controller('covidController',
 					$scope.home=false;
 					$scope.countryType = true;
 					$scope.country=false;
-					$scope.data =angular.copy($scope.countryData["countries"]);
+					$scope.data =angular.copy($scope.countryData["countries"].sort());
 					$scope.method='name';
 					$scope.text='Country Name';
 					$scope.byName=false;
@@ -161,7 +161,7 @@ covidApp.controller('covidController',
 					$scope.home=false;
 					$scope.countryType = true;
 					$scope.country=false;
-					$scope.data = angular.copy($scope.countryData["code"]);
+					$scope.data = angular.copy($scope.countryData["code"].sort());
 					$scope.method='code';
 					$scope.text='Country Code';
 					$scope.byCode=false;
